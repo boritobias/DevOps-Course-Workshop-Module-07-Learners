@@ -28,19 +28,19 @@ jobs:
         node-version: '12.x'
     
     - name: install dependencies
-      # working-directory: ./DotnetTemplate.Web
+      working-directory: ./DotnetTemplate.Web
       run: npm install
 
     - name: build TS code
-      # working-directory: ./DotnetTemplate.Web
+      working-directory: ./DotnetTemplate.Web
       run: npm run build
 
     - name: run linter on TS code
-      # working-directory: ./DotnetTemplate.Web
+      working-directory: ./DotnetTemplate.Web
       run: npm run lint
 
     - name: run TS tests
-      # working-directory: ./DotnetTemplate.Web
+      working-directory: ./DotnetTemplate.Web
       run: npm t
   
   messageSlack:
@@ -48,11 +48,8 @@ jobs:
     needs: [build, buildTS]
     runs-on: ubuntu-latest
     name: Message to Slack
-    env:
-      cBuildRes: ${{ needs.build.result }}
-      tsBuildRes: ${{ needs.buildTS.result }}
     steps:
-    - name: Send GitHub trigger payload to Slack Workflow Builder
+    - name: Send FAILED to Slack Workflow Builder
       if: ${{ needs.buildTS.result == 'failure' || needs.build.result == 'failure' }}
       id: slack
       uses: slackapi/slack-github-action@v1.19.0
@@ -66,6 +63,48 @@ jobs:
                 "text": {
                   "type": "mrkdwn",
                   "text": "GitHub Action build result: FAILED\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}"
+                }
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+    - name: Send CANCELLED to Slack Workflow Builder
+      if: ${{ needs.buildTS.result == 'cancelled' || needs.build.result == 'cancelled' }}
+      id: slack
+      uses: slackapi/slack-github-action@v1.19.0
+      with:
+        payload: |
+          {
+            "text": "GitHub Action build result: CANCELLED\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "GitHub Action build result: CANCELLED\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}"
+                }
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+    - name: Send SUCCESS to Slack Workflow Builder
+      if: ${{ needs.buildTS.result == 'success' && needs.build.result == 'success' }}
+      id: slack
+      uses: slackapi/slack-github-action@v1.19.0
+      with:
+        payload: |
+          {
+            "text": "GitHub Action build result: SUCCESS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "GitHub Action build result: SUCCESS\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}"
                 }
               }
             ]
