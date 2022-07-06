@@ -55,13 +55,13 @@ jobs:
       with:
         payload: |
           {
-            "text": "GitHub Action build result: ${{ needs.buildTS.result }} AND ${{ needs.build.result }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}",
+            "text": "GitHub Action build result: &{{ if or(eq(needs.buildTS.result, "failure"),eq(needs.build.result, "failure")) }} \n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}",
             "blocks": [
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "GitHub Action build result: ${{ needs.buildTS.result }} AND ${{ needs.build.result }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}"
+                  "text": "GitHub Action build result: &{{ if or(eq(needs.buildTS.result, "failure"),eq(needs.build.result, "failure")) }} \n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}",
                 }
               }
             ]
@@ -69,3 +69,4 @@ jobs:
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        # ${{ needs.buildTS.result }} AND ${{ needs.build.result }}
