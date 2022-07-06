@@ -15,6 +15,7 @@ jobs:
 
     - run: dotnet build
     - run: dotnet test
+    env: if: ${{ failure() }}
 
   buildTS:
     name: Build and test TS
@@ -42,26 +43,29 @@ jobs:
     - name: run TS tests
       # working-directory: ./DotnetTemplate.Web
       run: npm t
+
+    env: if: ${{ failure() }}
   
   messageSlack:
     if: ${{ always() }}
     needs: [build, buildTS]
     runs-on: ubuntu-latest
-    name: New push to repo
+    name: Message to Slack
     steps:
     - name: Send GitHub trigger payload to Slack Workflow Builder
       id: slack
       uses: slackapi/slack-github-action@v1.19.0
       with:
+      if: ${{ jobs.build.env || jobs.buildTS.env }}
         payload: |
           {
-            "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}",
+            "text": "GitHub Action build result: FAILED\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}",
             "blocks": [
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}"
+                  "text": "GitHub Action build result: FAILED\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}"
                 }
               }
             ]
