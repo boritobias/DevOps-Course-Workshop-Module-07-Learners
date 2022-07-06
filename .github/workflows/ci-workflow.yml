@@ -28,19 +28,19 @@ jobs:
         node-version: '12.x'
     
     - name: install dependencies
-      working-directory: ./DotnetTemplate.Web
+      # working-directory: ./DotnetTemplate.Web
       run: npm install
 
     - name: build TS code
-      working-directory: ./DotnetTemplate.Web
+      # working-directory: ./DotnetTemplate.Web
       run: npm run build
 
     - name: run linter on TS code
-      working-directory: ./DotnetTemplate.Web
+      # working-directory: ./DotnetTemplate.Web
       run: npm run lint
 
     - name: run TS tests
-      working-directory: ./DotnetTemplate.Web
+      # working-directory: ./DotnetTemplate.Web
       run: npm t
   
   messageSlack:
