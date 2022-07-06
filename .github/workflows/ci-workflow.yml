@@ -53,13 +53,13 @@ jobs:
       with:
         payload: |
           {
-            "text": "GitHub Action build result: ${{ job.status }}\n${{ commit || github.event.head_commit.url }}",
+            "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || commit }}",
             "blocks": [
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "GitHub Action build result: ${{ job.status }}\n${{ commit || github.event.head_commit.url }}"
+                  "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || commit }}"
                 }
               }
             ]
