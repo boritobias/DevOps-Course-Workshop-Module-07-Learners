@@ -58,13 +58,13 @@ jobs:
       with:
         payload: |
           {
-            "text": "GitHub Action build result: ${{ cBuildResult }} AND ${{ tsBuildResult }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}",
+            "text": "GitHub Action build result: ${{ needs.build.result }} AND ${{ needs.build.result }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}",
             "blocks": [
               {
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": "GitHub Action build result: ${{ cBuildResult }} AND ${{ tsBuildResult }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}",
+                  "text": "GitHub Action build result: ${{ needs.build.result }} AND ${{ needs.build.result }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}\nCommit message: ${{ github.event.head_commit.message }}",
                 }
               }
             ]
