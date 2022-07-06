@@ -13,18 +13,21 @@ jobs:
       with:                                            # This section is needed if you need to pass arguments to the action
         who-to-greet: 'Mona the Octocat'
 
-    - name: Build C# code
-      run: dotnet build
+    - run: dotnet build
+    - run: dotnet test
 
-    - name: Run C# tests
-      run: dotnet test
+  buildTS:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
 
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '12.x'
     
-    -name: install dependencies
+    - name: install dependencies
       working-directory: ./DotnetTemplate.Web
       run: npm install
 
