@@ -20,7 +20,8 @@ jobs:
       run: dotnet test
 
     - run: cd DotnetTemplate.Web
-    
+    - run: npm install
+
     - name: build TS code
       run: npm run build
 
