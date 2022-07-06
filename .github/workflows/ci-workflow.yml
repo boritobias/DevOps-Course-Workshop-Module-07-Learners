@@ -16,14 +16,14 @@ jobs:
     - name: Run C# tests
       run: dotnet test
     - name: build TS code
-      run: 
+      script: 
       - cd DotnetTemplate.Web
       - npm run build
     - name: run linter on TS code
-      run: 
+      script: 
       - cd DotnetTemplate.Web
       -  npm run lint
     - name: run TS tests
-      run:
+      script:
       - cd DotnetTemplate.Web
       - npm t
