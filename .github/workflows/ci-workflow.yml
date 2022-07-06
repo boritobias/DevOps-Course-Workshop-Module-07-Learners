@@ -7,23 +7,25 @@ jobs:
     runs-on: ubuntu-latest      # Sets the build environment a machine with the latest Ubuntu installed
     steps:
     - uses: actions/checkout@v2 # Adds a step to checkout the repository code
+
     - name: Hello world
       uses: actions/hello-world-javascript-action@v1.1 # Name of the action. This uses https://github.com/actions/hello-world-javascript-action
       with:                                            # This section is needed if you need to pass arguments to the action
         who-to-greet: 'Mona the Octocat'
+
     - name: Build C# code
       run: dotnet build
+
     - name: Run C# tests
       run: dotnet test
+
+    - run: cd DotnetTemplate.Web
+    
     - name: build TS code
-      script: 
-      - cd DotnetTemplate.Web
-      - npm run build
+      run: npm run build
+
     - name: run linter on TS code
-      script: 
-      - cd DotnetTemplate.Web
-      -  npm run lint
+      run: npm run lint
+
     - name: run TS tests
-      script:
-      - cd DotnetTemplate.Web
-      - npm t
+      run: npm t
