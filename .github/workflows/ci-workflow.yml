@@ -13,5 +13,11 @@ jobs:
         who-to-greet: 'Mona the Octocat'
     - name: Build C# code
       run: dotnet build
-    - name: Run C# test
+    - name: Run C# tests
       run: dotnet test
+    - name: build TS code
+      run: npm run build
+    - name: run linter on TS code
+      run: npm run lint
+    - name: run TS tests
+      run: npm t
