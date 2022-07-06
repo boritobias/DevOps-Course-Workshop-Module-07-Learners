@@ -51,7 +51,7 @@ jobs:
     steps:
     - name: Send FAILED to Slack Workflow Builder
       if: ${{ needs.buildTS.result == 'failure' || needs.build.result == 'failure' }}
-      id: slack
+      id: slackFail
       uses: slackapi/slack-github-action@v1.19.0
       with:
         payload: |
@@ -72,7 +72,7 @@ jobs:
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
     - name: Send CANCELLED to Slack Workflow Builder
       if: ${{ needs.buildTS.result == 'cancelled' || needs.build.result == 'cancelled' }}
-      id: slack
+      id: slackCancel
       uses: slackapi/slack-github-action@v1.19.0
       with:
         payload: |
@@ -93,7 +93,7 @@ jobs:
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
     - name: Send SUCCESS to Slack Workflow Builder
       if: ${{ needs.buildTS.result == 'success' && needs.build.result == 'success' }}
-      id: slack
+      id: slackSuccess
       uses: slackapi/slack-github-action@v1.19.0
       with:
         payload: |
